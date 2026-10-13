@@ -1,0 +1,347 @@
+/* ==========================================================
+   Adham CV - Stylesheet
+   Methods: CSS variables, Flexbox, Grid, mobile-first media
+   queries, CSS-only modal (:target), prefers-color-scheme.
+   ========================================================== */
+
+/* ---------- 4. CSS variables (light theme = default) ---------- */
+:root {
+  color-scheme: light dark;
+
+  --bg: #faf5ec;
+  --text: #2b2118;
+  --muted: #5c4a38;
+  --card: #ffffff;
+  --border: #8c7b68;
+  --h1: #00555e;
+  --heading: #7a4a12;
+  --primary: #00606b;
+  --on-primary: #ffffff;
+  --primary-light: #e1f1f4;
+  --row-hover: #cfe6ea;
+  --focus: #b35900;
+  --overlay: rgba(30, 22, 14, 0.65);
+  --shadow: rgba(0, 0, 0, 0.15);
+
+  --radius: 8px;
+  --space: 16px;
+  --font: Arial, sans-serif;
+
+  --success-bg: #e3f4e6; --success-text: #14451f; --success-border: #2e7d3a;
+  --error-bg:   #fde8e6; --error-text:   #6e1410; --error-border:   #b3261e;
+  --info-bg:    #e1f1f4; --info-text:    #0b3d44; --info-border:    #00606b;
+  --warning-bg: #fff3d6; --warning-text: #593a00; --warning-border: #a86400;
+}
+
+/* ---------- 6. Dark mode: redefine the variables only ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: rgb(59, 46, 33);
+    --text: aliceblue;
+    --muted: #d8cdbf;
+    --card: #4a3a2b;
+    --border: #c9b9a5;
+    --h1: rgb(0, 255, 255);
+    --heading: rgb(255, 220, 150);
+    --primary: rgb(0, 255, 255);
+    --on-primary: #1d1710;
+    --primary-light: #4a3a2b;
+    --row-hover: #5a4634;
+    --focus: rgb(255, 220, 150);
+    --overlay: rgba(0, 0, 0, 0.75);
+    --shadow: rgba(0, 0, 0, 0.45);
+
+    --success-bg: #1f3a25; --success-text: #d4f5da; --success-border: #6fcf84;
+    --error-bg:   #4a1f1c; --error-text:   #ffd9d5; --error-border:   #ff8a80;
+    --info-bg:    #1b3b40; --info-text:    #d2f6fb; --info-border:    #00ffff;
+    --warning-bg: #4d3a10; --warning-text: #ffe9b3; --warning-border: #ffc04d;
+  }
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+}
+
+main { max-width: 1100px; margin: 0 auto; }
+
+h1 { color: var(--h1); }
+h2, h3 { color: var(--heading); }
+a { color: var(--primary); }
+p { max-width: 70ch; }
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 200;
+  padding: 10px 16px;
+  font-weight: bold;
+  color: var(--on-primary);
+  background: var(--primary);
+  border-radius: var(--radius);
+}
+.skip-link:focus { top: 12px; }
+
+/* ---------- 1. Flexbox: navbar ---------- */
+.navbar {
+  max-width: 1100px;
+  margin: 0 auto 25px;
+  display: flex;
+  flex-wrap: wrap;                   /* links drop to a new line on small screens */
+  justify-content: space-between;    /* logo left, links right */
+  align-items: center;               /* vertically centered */
+  gap: 8px 20px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--h1);
+  padding: 8px 0;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links a {
+  display: inline-block;
+  padding: 10px 8px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.links a:hover { text-decoration: underline; }
+
+.links a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* Flexbox: wrapping tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 4px 14px;
+  color: var(--info-text);
+  background: var(--info-bg);
+  border: 2px solid var(--info-border);
+  border-radius: 999px;
+}
+
+footer {
+  max-width: 1100px;
+  margin: 40px auto 0;
+  padding-top: 15px;
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- 2 + 3. Grid, mobile-first: 1 / 2 / 3 columns ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;                 /* base = mobile */
+  gap: var(--space);
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {                   /* tablet and up: 2 columns */
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1024px) {                  /* desktop and up: 3 columns */
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.grid .full { grid-column: 1 / -1; }          /* spans the whole row */
+
+/* ---------- 5.2 Cards ---------- */
+.card {
+  padding: 20px;
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover { box-shadow: 0 8px 20px var(--shadow); }
+.card h3 { margin-top: 0; }
+.card p { margin-bottom: 0; }
+
+/* ---------- 5.3 Table ---------- */
+.table-wrap { overflow-x: auto; margin-top: 15px; }   /* scrolls sideways on small screens */
+
+table { width: 100%; min-width: 380px; border-collapse: collapse; }
+
+caption {
+  padding-bottom: 8px;
+  text-align: left;
+  font-weight: bold;
+  color: var(--heading);
+}
+
+th, td {
+  padding: 10px 14px;
+  text-align: left;
+  border: 2px solid var(--border);
+}
+
+th { background: var(--primary); color: var(--on-primary); }
+tbody tr:nth-child(even) { background: var(--primary-light); }   /* zebra rows */
+tbody tr:hover { background: var(--row-hover); }
+
+/* ---------- 5.1 Buttons ---------- */
+.btn {
+  display: inline-block;
+  min-height: 44px;
+  padding: 10px 20px;
+  font: inherit;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--on-primary);
+  background: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px var(--shadow); }
+.btn:active { transform: translateY(0); }
+
+.btn-outline { background: transparent; color: var(--primary); }
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 15px 0; }
+
+/* ---------- Form elements ---------- */
+.form { max-width: 520px; }
+.field { margin-bottom: 18px; }
+
+label { display: block; margin-bottom: 6px; font-weight: bold; }
+.required { font-weight: normal; color: var(--muted); }
+.hint { margin: 4px 0 0; font-size: 0.9rem; color: var(--muted); }
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  font: inherit;
+  color: var(--text);
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+}
+
+textarea { resize: vertical; }
+
+fieldset {
+  margin: 0 0 18px;
+  padding: 10px 14px 14px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+}
+
+legend { padding: 0 6px; font-weight: bold; }
+
+.choice { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.choice input { width: 20px; height: 20px; margin: 0; }
+.choice label { margin: 0; font-weight: normal; }
+
+/* ---------- Alerts ---------- */
+.alert {
+  margin: 15px 0;
+  padding: 14px 16px;
+  color: var(--alert-text);
+  background: var(--alert-bg);
+  border: 2px solid var(--alert-border);
+  border-left-width: 8px;
+  border-radius: 6px;
+}
+
+.alert strong { display: block; margin-bottom: 2px; }
+.alert p { margin: 0; }
+
+.alert-success { --alert-bg: var(--success-bg); --alert-text: var(--success-text); --alert-border: var(--success-border); }
+.alert-error   { --alert-bg: var(--error-bg);   --alert-text: var(--error-text);   --alert-border: var(--error-border); }
+.alert-info    { --alert-bg: var(--info-bg);    --alert-text: var(--info-text);    --alert-border: var(--info-border); }
+.alert-warning { --alert-bg: var(--warning-bg); --alert-text: var(--warning-text); --alert-border: var(--warning-border); }
+
+/* ---------- 5.4 Modal: CSS-only with :target ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;                                  /* cover the whole screen */
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;                                /* hidden by default */
+  visibility: hidden;                        /* also removes it from keyboard / screen reader order */
+  pointer-events: none;
+  transition: opacity 0.25s, visibility 0s 0.25s;
+}
+
+.overlay:target {                            /* shown when URL = #demo-modal */
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.25s;
+}
+
+.overlay-bg { position: absolute; inset: 0; background: var(--overlay); }
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  color: var(--text);
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+}
+
+.dialog h2 { margin-top: 0; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
