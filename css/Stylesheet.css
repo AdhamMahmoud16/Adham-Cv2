@@ -1,10 +1,4 @@
-/* ==========================================================
-   Adham CV - Stylesheet
-   Methods: CSS variables, Flexbox, Grid, mobile-first media
-   queries, CSS-only modal (:target), prefers-color-scheme.
-   ========================================================== */
 
-/* ---------- 4. CSS variables (light theme = default) ---------- */
 :root {
   color-scheme: light dark;
 
